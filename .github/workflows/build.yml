@@ -3,7 +3,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: ghcr.io/maemon4095/satysfi:latest
+    container: 
+      image: ghcr.io/maemon4095/satysfi:latest
+      options: --user root
     steps:
     - name: checkout satysfi
       uses: actions/checkout@v3
