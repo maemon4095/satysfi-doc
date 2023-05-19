@@ -18,5 +18,13 @@ jobs:
         path: last-commit-id
       continue-on-error: true
     
-    - run: test -f "last-commit-id" && export ID=$(cat last-commit-id) && echo "LAST_COMMIT_ID='${ID}'" || echo "first build"
-    - run: echo ${{ env.LAST_COMMIT_ID }} 
+    - name: load last build commit id into environment variable 
+      run: test -f "last-commit-id" && export ID=$(cat last-commit-id) && echo "LAST_COMMIT_ID='${ID}'" || echo "first build"
+    
+    - name: load head commit id into environment variable
+      run: export ID=$(git rev-parse HEAD) && echo "HEAD_COMMIT_ID='${ID}'"
+      working-directory: satysfi
+
+    - run: echo "${{ env.LAST_COMMIT_ID }} == ${{ env.HEAD_COMMIT_ID }}? ${{ env.LAST_COMMIT_ID == env.HEAD_COMMIT_ID }}" 
+    
+    
