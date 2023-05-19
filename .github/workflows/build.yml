@@ -27,11 +27,13 @@ jobs:
 
     - name: check require update
       run: | 
-        echo "REQUIRE_UPDATE=$(\
+        export REQUIRE_UPDATE=$(\
           [ -z '$LAST_COMMIT_ID' ] || \                                         # last commit id is not exists
           [ '$LAST_COMMIT_ID' != '$HEAD_COMMIT_ID' ] && \                       # or last commit id is not equal to head commit id
           git diff $LAST_COMMIT_ID $HEAD_COMMIT_ID --exit-code --quiet -- doc \ # and there is difference between last commit and head commit
-        )" >> $GITHUB_ENV 
+        )
+        echo $REQUIRE_UPDATE
+        echo "REQUIRE_UPDATE=$REQUIRE_UPDATE" >> $GITHUB_ENV 
 
     - name: update last commit id
       run: echo '$HEAD_COMMIT_ID' > last-commit-id
