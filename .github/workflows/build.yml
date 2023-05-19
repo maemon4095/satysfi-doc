@@ -25,6 +25,6 @@ jobs:
       run: export ID=$(git rev-parse HEAD) && echo "HEAD_COMMIT_ID=${ID}" >> $GITHUB_ENV
       working-directory: satysfi
 
-    - run: echo "LAST_COMMIT_ID == HEAD_COMMIT_ID? $LAST_COMMIT_ID == $HEAD_COMMIT_ID" 
+    - run: echo "LAST_COMMIT_ID == HEAD_COMMIT_ID? ${{ env.LAST_COMMIT_ID == env.HEAD_COMMIT_ID }}" 
     
     
