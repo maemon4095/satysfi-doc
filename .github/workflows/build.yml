@@ -12,6 +12,8 @@ jobs:
       with:
         repository: gfngfn/SATySFi
         path: satysfi
+    
+    - run: echo $HOME
 
     - name: restore last build commit
       uses: actions/download-artifact@v3
