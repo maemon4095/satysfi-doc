@@ -25,6 +25,47 @@ jobs:
       run: export ID=$(git rev-parse HEAD) && echo "HEAD_COMMIT_ID=${ID}" >> $GITHUB_ENV
       working-directory: satysfi
 
-    - run: echo "LAST_COMMIT_ID == HEAD_COMMIT_ID? ${{ env.LAST_COMMIT_ID == env.HEAD_COMMIT_ID }}" 
+    - name: check require update
+      run: | 
+        echo "REQUIRE_UPDATE=$(\
+          [ -z '$LAST_COMMIT_ID' ] || \                                         # last commit id is not exists
+          [ '$LAST_COMMIT_ID' != '$HEAD_COMMIT_ID' ] && \                       # or last commit id is not equal to head commit id
+          git diff $LAST_COMMIT_ID $HEAD_COMMIT_ID --exit-code --quiet -- doc \ # and there is difference between last commit and head commit
+        )" >> $GITHUB_ENV 
+
+    - name: update last commit id
+      run: echo '$HEAD_COMMIT_ID' > last-commit-id
+      if: ${{ env.REQUIRE_UPDATE }}
+
+    - name: save last commit id
+      uses: actions/upload-artifact@v3
+      with:
+        name: last-commit-id
+        path: last-commit-id
+      if: ${{ env.REQUIRE_UPDATE }}
+
+    - name: build docs
+      run: |
+        satyrographos install
+        make
+      working-directory: satysfi/docs
+      if: ${{ env.REQUIRE_UPDATE }}
+
+    - name: checkout repository
+      uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        path: repo
+      if: ${{ env.REQUIRE_UPDATE }}
     
+    - name: commit docs
+      run: |
+        mv ../satysfi/docs/*.pdf .
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git add .
+        git commit -m "build"
+        git push
+      working-directory: repo
+      if: ${{ env.REQUIRE_UPDATE }}
     
