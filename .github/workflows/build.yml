@@ -27,13 +27,14 @@ jobs:
 
     - name: check require update
       run: | 
-        test -z '$LAST_COMMIT_ID'; echo "LAST_COMMIT_ID is exists? $?"
-        test -z '$LAST_COMMIT_ID''$LAST_COMMIT_ID' != '$HEAD_COMMIT_ID'; echo "LAST_COMMIT_ID == HEAD_COMMIT_ID? $?"
-        ((test -z '$LAST_COMMIT_ID') || ( \                                         # last commit id is not exists
-          (test '$LAST_COMMIT_ID' != '$HEAD_COMMIT_ID') && \                       # or last commit id is not equal to head commit id
+        if [ -z "$LAST_COMMIT_ID" ] || ( \                                      # last commit id is not exists
+          [ "$LAST_COMMIT_ID" != "$HEAD_COMMIT_ID" ] && \                       # or last commit id is not equal to head commit id
           git diff $LAST_COMMIT_ID $HEAD_COMMIT_ID --exit-code --quiet -- doc \ # and there is difference between last commit and head commit
-        )) 
-        export REQUIRE_UPDATE=$?
+        ); then
+          export REQUIRE_UPDATE=true
+        else 
+          export REQUIRE_UPDATE=false
+        fi
         echo "REQUIRE_UPDATE=$REQUIRE_UPDATE"
         echo "REQUIRE_UPDATE=$REQUIRE_UPDATE" >> $GITHUB_ENV
       working-directory: satysfi
