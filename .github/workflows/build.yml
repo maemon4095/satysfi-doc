@@ -1,0 +1,26 @@
+on:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: ghcr.io/maemon4095/satysfi:latest
+    steps:
+    - name: checkout satysfi
+      uses: actions/checkout@v3
+      with:
+        repository: gfngfn/SATySFi
+        path: satysfi
+
+    - name: restore last build commit
+      uses: actions/download-artifact@v3
+      with:
+        name: last-commit-id
+        path: last-commit-id
+      continue-on-error: true
+    
+    - run: |
+        if test -f "last-commit-id"; then
+          echo "last commit was restored"
+        else
+          echo "last commit was not exist"
+        fi
