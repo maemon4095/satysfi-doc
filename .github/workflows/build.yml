@@ -19,12 +19,12 @@ jobs:
       continue-on-error: true
     
     - name: load last build commit id into environment variable 
-      run: test -f "last-commit-id" && export ID=$(cat last-commit-id) && echo "LAST_COMMIT_ID='${ID}' >> $GITHUB_ENV" || echo "first build"
+      run: test -f "last-commit-id" && export ID=$(cat last-commit-id) && echo "LAST_COMMIT_ID=${ID} >> $GITHUB_ENV" || echo "first build"
     
     - name: load head commit id into environment variable
-      run: export ID=$(git rev-parse HEAD) && echo "HEAD_COMMIT_ID='${ID}' >> $GITHUB_ENV"
+      run: export ID=$(git rev-parse HEAD) && echo "HEAD_COMMIT_ID=${ID} >> $GITHUB_ENV"
       working-directory: satysfi
 
-    - run: echo "${{ env.LAST_COMMIT_ID }} == ${{ env.HEAD_COMMIT_ID }}? ${{ env.LAST_COMMIT_ID == env.HEAD_COMMIT_ID }}" 
+    - run: echo "LAST_COMMIT_ID== H EAD_COMMIT_ID? $LAST_COMMIT_ID == $HEAD_COMMIT_ID" 
     
     
