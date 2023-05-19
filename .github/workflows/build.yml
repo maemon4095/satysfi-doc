@@ -18,9 +18,5 @@ jobs:
         path: last-commit-id
       continue-on-error: true
     
-    - run: |
-        if test -f "last-commit-id"; then
-          echo "last commit was restored"
-        else
-          echo "last commit was not exist"
-        fi
+    - run: test -f "last-commit-id" && export ID=$(cat last-commit-id) && echo "LAST_COMMIT_ID='${ID}'"
+    - run: echo ${{ env.LAST_COMMIT_ID }} 
