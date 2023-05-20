@@ -3,18 +3,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: 
-      image: ghcr.io/maemon4095/satysfi:latest
-      options: --user root --tty
-    defaults:
-        run:
-          shell: bash -leo pipefail {0}
     steps:
-    - name: initialize
-      run: |
-        opam init
-        eval $(opam env)
-
     - name: checkout satysfi
       uses: actions/checkout@v3
       with:
@@ -26,9 +15,6 @@ jobs:
       with:
         name: last-commit-id
         path: last-commit-id
-      continue-on-error: true
-    
-    - run: ls -la && cat last-commit-id
       continue-on-error: true
     
     - name: load last build commit id into environment variable 
@@ -65,9 +51,10 @@ jobs:
 
     - name: build docs
       run: |
-        satyrographos install
-        make
-      working-directory: satysfi/doc
+        docker run --workdir satysfi/doc \
+                   --mount type=bind, consistency=cached, source=/satysfi, target=/satysfi \
+                   ghcr.io/maemon4095/satysfi:latest \ 
+                   satyrographos install && make
       if: ${{ env.REQUIRE_UPDATE }}
 
     - name: checkout repository
