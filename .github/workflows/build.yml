@@ -52,7 +52,7 @@ jobs:
     - name: build docs
       run: |
         docker run --workdir satysfi/doc \
-                   --mount type=bind, consistency=cached, source=/satysfi, target=/satysfi \
+                   --mount type=bind,consistency=cached,src=/satysfi,dst=/satysfi \
                    ghcr.io/maemon4095/satysfi:latest \ 
                    satyrographos install && make
       if: ${{ env.REQUIRE_UPDATE }}
