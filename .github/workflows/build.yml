@@ -8,8 +8,13 @@ jobs:
       options: --user root --tty
     defaults:
         run:
-          shell: bash -ileo pipefail {0}
+          shell: bash -leo pipefail {0}
     steps:
+    - name: initialize
+      run: |
+        opam init
+        eval $(opam env)
+
     - name: checkout satysfi
       uses: actions/checkout@v3
       with:
