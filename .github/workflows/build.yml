@@ -14,7 +14,7 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         name: last-commit-id
-        path: last-commit-id
+        path: .
       continue-on-error: true
     
     - name: load last build commit id into environment variable 
