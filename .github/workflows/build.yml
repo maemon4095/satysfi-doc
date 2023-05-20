@@ -22,6 +22,9 @@ jobs:
         path: last-commit-id
       continue-on-error: true
     
+    - run: ls -la && cat last-commit-id
+      continue-on-error: true
+    
     - name: load last build commit id into environment variable 
       run: test -f "last-commit-id" && export ID=$(cat last-commit-id) && echo "LAST_COMMIT_ID=${ID}" >> $GITHUB_ENV || echo "first build"
     
