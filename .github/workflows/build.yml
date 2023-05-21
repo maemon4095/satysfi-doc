@@ -53,19 +53,19 @@ jobs:
       working-directory: satysfi
 
     - name: update VERSION
-      if: ${{ env.REQUIRE_UPDATE }}
+      if: ${{ fromJSON(env.REQUIRE_UPDATE) }}
       run: echo "$HEAD_COMMIT_ID" > VERSION
       working-directory: repo
 
     - name: build docs
-      if: ${{ env.REQUIRE_UPDATE }}
+      if: ${{ fromJSON(env.REQUIRE_UPDATE) }}
       run: |
         docker run --workdir /satysfi/doc \
                    --mount type=bind,consistency=cached,src=$(pwd)/satysfi,dst=/satysfi \
                    ghcr.io/maemon4095/satysfi:latest "satyrographos install && make"
     
     - name: commit docs
-      if: ${{ env.REQUIRE_UPDATE }}
+      if: ${{ fromJSON(env.REQUIRE_UPDATE) }}
       run: |
         mv ../satysfi/doc/*.pdf .
         git config user.name github-actions
