@@ -12,16 +12,17 @@ jobs:
         repository: gfngfn/SATySFi
         path: satysfi
 
-    - name: restore last build commit
-      uses: actions/download-artifact@v3
+    - name: checkout repository
+      if: ${{ env.REQUIRE_UPDATE }}
+      uses: actions/checkout@v3
       with:
-        name: last-commit-id
-        path: .
-      continue-on-error: true
+        token: ${{ secrets.GITHUB_TOKEN }}
+        path: repo
     
     - name: load last build commit id into environment variable 
-      run: test -f "last-commit-id" && export ID=$(cat last-commit-id) && echo "LAST_COMMIT_ID=${ID}" >> $GITHUB_ENV || echo "first build"
-    
+      run: test -f "VERSION" && export ID=$(cat VERSION) && echo "LAST_COMMIT_ID=${ID}" >> $GITHUB_ENV || echo "first build"
+      working-directory: repo
+
     - name: load head commit id into environment variable
       run: export ID=$(git rev-parse HEAD) && echo "HEAD_COMMIT_ID=${ID}" >> $GITHUB_ENV
       working-directory: satysfi
@@ -42,15 +43,8 @@ jobs:
 
     - name: update last commit id
       if: ${{ env.REQUIRE_UPDATE }}
-      run: echo '$HEAD_COMMIT_ID' > last-commit-id
-      
-
-    - name: save last commit id
-      if: ${{ env.REQUIRE_UPDATE }}
-      uses: actions/upload-artifact@v3
-      with:
-        name: last-commit-id
-        path: last-commit-id
+      run: echo '$HEAD_COMMIT_ID' > VERSION
+      working-directory: repo
 
     - name: build docs
       if: ${{ env.REQUIRE_UPDATE }}
@@ -58,18 +52,9 @@ jobs:
         docker run --workdir /satysfi/doc \
                    --mount type=bind,consistency=cached,src=$(pwd)/satysfi,dst=/satysfi \
                    ghcr.io/maemon4095/satysfi:latest "satyrographos install && make"
-      
-    - name: checkout repository
-      if: ${{ env.REQUIRE_UPDATE }}
-      uses: actions/checkout@v3
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        path: repo
     
     - name: commit docs
       if: ${{ env.REQUIRE_UPDATE }}
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         mv ../satysfi/doc/*.pdf .
         git config user.name github-actions
