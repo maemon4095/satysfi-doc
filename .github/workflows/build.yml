@@ -30,9 +30,7 @@ jobs:
 
     - name: check require update
       run: | 
-        if [ -z "$LAST_COMMIT_ID" ] || ( \                                      # last commit id is not exists
-          [ "$LAST_COMMIT_ID" != "$HEAD_COMMIT_ID" ] && \                       # or last commit id is not equal to head commit id
-          git diff $LAST_COMMIT_ID $HEAD_COMMIT_ID --exit-code --quiet -- doc) # and there is difference between last commit and head commit
+        if [ -z "$LAST_COMMIT_ID" ] || ([ "$LAST_COMMIT_ID" != "$HEAD_COMMIT_ID" ] && git diff $LAST_COMMIT_ID $HEAD_COMMIT_ID --exit-code --quiet -- doc)
         then
           export REQUIRE_UPDATE=true
         else 
