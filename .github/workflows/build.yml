@@ -49,12 +49,11 @@ jobs:
         path: last-commit-id
       if: ${{ env.REQUIRE_UPDATE }}
 
-    - name: build docs
+    - name: build docs #なんかコマンドがdocker runの引数に渡してない扱いになってそう．
       run: |
         docker run --workdir /satysfi/doc \
                    --mount type=bind,consistency=cached,src=$(pwd)/satysfi,dst=/satysfi \
-                   ghcr.io/maemon4095/satysfi:latest \ 
-                   pwd
+                   ghcr.io/maemon4095/satysfi:latest pwd
       if: ${{ env.REQUIRE_UPDATE }}
 
     - name: checkout repository
