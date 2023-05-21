@@ -32,8 +32,8 @@ jobs:
       run: | 
         if [ -z "$LAST_COMMIT_ID" ] || ( \                                      # last commit id is not exists
           [ "$LAST_COMMIT_ID" != "$HEAD_COMMIT_ID" ] && \                       # or last commit id is not equal to head commit id
-          git diff $LAST_COMMIT_ID $HEAD_COMMIT_ID --exit-code --quiet -- doc \ # and there is difference between last commit and head commit
-        ); then
+          git diff $LAST_COMMIT_ID $HEAD_COMMIT_ID --exit-code --quiet -- doc) # and there is difference between last commit and head commit
+        then
           export REQUIRE_UPDATE=true
         else 
           export REQUIRE_UPDATE=false
