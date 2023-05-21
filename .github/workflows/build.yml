@@ -13,7 +13,6 @@ jobs:
         path: satysfi
 
     - name: checkout repository
-      if: ${{ env.REQUIRE_UPDATE }}
       uses: actions/checkout@v3
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
