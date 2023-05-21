@@ -30,11 +30,23 @@ jobs:
 
     - name: check require update
       run: | 
-        if [ -z "$LAST_COMMIT_ID" ] || ([ "$LAST_COMMIT_ID" != "$HEAD_COMMIT_ID" ] && git diff $LAST_COMMIT_ID $HEAD_COMMIT_ID --exit-code --quiet -- doc)
-        then
+        if [ -z "$LAST_COMMIT_ID" ]; then
+          echo "LAST_COMMIT_ID does not exists; this is first build."
           export REQUIRE_UPDATE=true
         else 
-          export REQUIRE_UPDATE=false
+          if [ "$LAST_COMMIT_ID" != "$HEAD_COMMIT_ID" ]; then
+            echo "newer commit was found."
+            if (git diff $LAST_COMMIT_ID $HEAD_COMMIT_ID --exit-code --quiet -- doc); then
+              echo "difference between last commit and head commit was found."
+              export REQUIRE_UPDATE=true
+            else
+              echo "no difference was found."
+              export REQUIRE_UPDATE=false
+            fi
+          else
+            echo "last commit is newest."
+            export REQUIRE_UPDATE=false
+          fi
         fi
         echo "REQUIRE_UPDATE=$REQUIRE_UPDATE"
         echo "REQUIRE_UPDATE=$REQUIRE_UPDATE" >> $GITHUB_ENV
