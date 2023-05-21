@@ -39,31 +39,35 @@ jobs:
       working-directory: satysfi
 
     - name: update last commit id
-      run: echo '$HEAD_COMMIT_ID' > last-commit-id
       if: ${{ env.REQUIRE_UPDATE }}
+      run: echo '$HEAD_COMMIT_ID' > last-commit-id
+      
 
     - name: save last commit id
+      if: ${{ env.REQUIRE_UPDATE }}
       uses: actions/upload-artifact@v3
       with:
         name: last-commit-id
         path: last-commit-id
-      if: ${{ env.REQUIRE_UPDATE }}
 
     - name: build docs
+      if: ${{ env.REQUIRE_UPDATE }}
       run: |
         docker run --workdir /satysfi/doc \
                    --mount type=bind,consistency=cached,src=$(pwd)/satysfi,dst=/satysfi \
                    ghcr.io/maemon4095/satysfi:latest "satyrographos install && make"
-      if: ${{ env.REQUIRE_UPDATE }}
-
+      
     - name: checkout repository
+      if: ${{ env.REQUIRE_UPDATE }}
       uses: actions/checkout@v3
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         path: repo
-      if: ${{ env.REQUIRE_UPDATE }}
     
     - name: commit docs
+      if: ${{ env.REQUIRE_UPDATE }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         mv ../satysfi/doc/*.pdf .
         git config user.name "${GITHUB_ACTOR}"
@@ -72,5 +76,5 @@ jobs:
         git commit -m "build"
         git push
       working-directory: repo
-      if: ${{ env.REQUIRE_UPDATE }}
+      
     
