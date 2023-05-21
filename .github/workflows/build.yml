@@ -18,11 +18,11 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         path: repo
     
-    - name: load last build commit id into environment variable 
+    - name: load last VERSION id into environment variable 
       run: test -f "VERSION" && export ID=$(cat VERSION) && echo "LAST_COMMIT_ID=${ID}" >> $GITHUB_ENV || echo "first build"
       working-directory: repo
 
-    - name: load head commit id into environment variable
+    - name: load current VERSION id into environment variable
       run: export ID=$(git rev-parse HEAD) && echo "HEAD_COMMIT_ID=${ID}" >> $GITHUB_ENV
       working-directory: satysfi
 
@@ -40,9 +40,9 @@ jobs:
         echo "REQUIRE_UPDATE=$REQUIRE_UPDATE" >> $GITHUB_ENV
       working-directory: satysfi
 
-    - name: update last commit id
+    - name: update VERSION
       if: ${{ env.REQUIRE_UPDATE }}
-      run: echo '$HEAD_COMMIT_ID' > VERSION
+      run: echo "$HEAD_COMMIT_ID" > VERSION
       working-directory: repo
 
     - name: build docs
