@@ -22,7 +22,7 @@ jobs:
     
     - name: load last VERSION id into environment variable 
       run: test -f "VERSION" && export ID=$(cat VERSION) && echo "LAST_COMMIT_ID=${ID}" >> $GITHUB_ENV || echo "first build"
-      working-directory: repo
+      working-directory: repo/artifacts
 
     - name: load current VERSION id into environment variable
       run: export ID=$(git rev-parse HEAD) && echo "HEAD_COMMIT_ID=${ID}" >> $GITHUB_ENV
@@ -55,7 +55,7 @@ jobs:
     - name: update VERSION
       if: ${{ fromJSON(env.REQUIRE_UPDATE) }}
       run: echo "$HEAD_COMMIT_ID" > VERSION
-      working-directory: repo
+      working-directory: repo/artifacts
 
     - name: build docs
       if: ${{ fromJSON(env.REQUIRE_UPDATE) }}
@@ -67,7 +67,7 @@ jobs:
     - name: commit docs
       if: ${{ fromJSON(env.REQUIRE_UPDATE) }}
       run: |
-        mv ../satysfi/doc/*.pdf .
+        mv ../satysfi/doc/*.pdf /docs/
         git config user.name github-actions
         git config user.email ${{ github.actor }}@users.noreply.github.com
         git add .
