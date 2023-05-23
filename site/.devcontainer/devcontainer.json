@@ -1,0 +1,25 @@
+{
+    "name": "satysfi-doc/${localWorkspaceFolderBasename}",
+    "image": "node:20-slim",
+    "runArgs": [
+        "--workdir",
+        "/satysfi-doc/${localWorkspaceFolderBasename}",
+        "--tty",
+        "--name",
+        "${localWorkspaceFolderBasename}"
+    ],
+    "mounts": [
+        {
+            "type": "volume",
+            "source": "${localWorkspaceFolderBasename}_tmp",
+            "target": "/satysfi-doc/${localWorkspaceFolderBasename}/node_modules"
+        }
+    ],
+    "workspaceMount": "source=${localWorkspaceFolder}/..,target=/satysfi-doc,type=bind,consistency=cached",
+    "workspaceFolder": "/satysfi-doc/${localWorkspaceFolderBasename}",
+    "forwardPorts": [
+        8080
+    ],
+    "postStartCommand": "npm install -g npm",
+    "postCreateCommand": "apt update -y && apt upgrade -y && apt install git -y"
+}
