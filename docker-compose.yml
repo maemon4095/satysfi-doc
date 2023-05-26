@@ -1,20 +1,15 @@
 version: '3.8'
 services:
   site:
-    build: .
     image: node:20-slim
     restart: 'no'
     working_dir: '/site'
     tty: true
     volumes:
-      - type: bind
-        source: ./
-        target: /satysfi-doc
+      - ./:/satysfi-doc:cached
       - type: volume
         source: site_node_modules
         target: /satysfi-doc/site/node_modules
-        volume:
-          nocopy: true
 
 volumes:
   site_node_modules:
