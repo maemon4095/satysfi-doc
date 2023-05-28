@@ -74,5 +74,3 @@ jobs:
         git commit -m "build"
         git push
       working-directory: repo
-      
-    

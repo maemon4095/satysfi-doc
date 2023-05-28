@@ -1,4 +1,4 @@
-on: workflow_call
+on: workflow_dispatch
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -11,5 +11,16 @@ jobs:
         uses: actions/checkout@v3
         with:
           path: repo
-      
-      
+
+      - name: build
+        run: npm install && npm build
+        working-directory: repo
+
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v1.0.8
+        with:
+          path: repo/dist
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
