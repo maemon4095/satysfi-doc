@@ -31,7 +31,7 @@ function find(root: string, options?: FindOptions): Entry | null {
     }
     const files = fs.readdirSync(root, { withFileTypes: true });
     return Object.fromEntries(files.flatMap((f) => {
-        const p = join(root, f.path ?? "", f.name);
+        const p = join(root, f.name);
         const e = find(p, options);
         if (e === null) {
             return [];
