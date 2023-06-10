@@ -9,7 +9,7 @@ const target = find('public/artifacts', {
         include: /\.pdf$/
     }
 });
-function displayDir(target: Directory): string {
+function displayDir(base: string, target: Directory): string {
     return `
     <div class="dir">
         <span>doc/</span>
@@ -22,7 +22,7 @@ function displayDir(target: Directory): string {
         let contents = "";
         for (const [name, entry] of Object.entries(target)) {
             if (typeof entry === "string") {
-                contents += `<li><a href="pdfjs/web/viewer.html?file=/${entry}">${name}</a></li>`;
+                contents += `<li><a href="pdfjs/web/viewer.html?file=${base}${entry}">${name}</a></li>`;
             } else {
                 contents += `<li class="dir">
                     <span>${name}/</span>
@@ -52,7 +52,7 @@ export default defineConfig({
                 evaluate(expr) {
                     switch (expr) {
                         case "artifacts":
-                            return displayDir(target as Directory);
+                            return displayDir(config.base, target as Directory);
                         case "base":
                             return config.base;
                     }
