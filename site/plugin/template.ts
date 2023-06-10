@@ -1,21 +1,28 @@
-import { coalesce, Optional, } from "./coalesce";
+import { ResolvedConfig } from "vite";
 type RegexMatchesWithIndices = RegExpExecArray & { indices: Array<[number, number]>; };
 type Options = {
+    order?: 'pre' | 'post',
     evaluate(expr: string): string | null | undefined;
+    onConfigResolved?: (resolvedConfig: ResolvedConfig) => void;
 };
 
-export default function plugin(options: Optional<Options>) {
-    const { evaluate } = coalesce(
-        options,
-        {
-            evaluate(expr: string) { }
-        }
-    );
+export default function plugin(options: Options) {
+    const staging: any = {};
+
+    if (options.onConfigResolved !== undefined) {
+        const process = options.onConfigResolved;
+        staging.configResolved = (resolvedConfig: ResolvedConfig) => {
+            process(resolvedConfig);
+        };
+    }
 
     return {
+        order: options.order,
         name: "template",
+        ...staging,
         transformIndexHtml: (src: string) => {
-            const pattern = /\${{(?<expr>.*?)}}/gds;
+            const evaluate = options.evaluate;
+            const pattern = /(?<esc>\\?)\${{(?<expr>.*?)}}/gds;
 
             let transformed = "";
             let last = 0;
@@ -24,12 +31,16 @@ export default function plugin(options: Optional<Options>) {
                 if (match === null) break;
                 const [[start, end]] = match.indices;
                 if (start > last) {
-                    transformed += src.substring(last, start - 1 /* 仕様と異なり端を含む */);
+                    transformed += src.substring(last, start);
                 }
-                const expr = match.groups?.["expr"] ?? "";
-                const t = evaluate(expr);
-                if (!(t === undefined || t === null)) {
-                    transformed += t;
+                if (match.groups?.["esc"] === "") {
+                    const expr = match.groups?.["expr"] ?? "";
+                    const t = evaluate(expr);
+                    if (!(t === undefined || t === null)) {
+                        transformed += t;
+                    }
+                } else {
+                    transformed += match[0].substring(1);
                 }
                 last = end;
             }

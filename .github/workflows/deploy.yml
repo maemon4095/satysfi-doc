@@ -13,7 +13,7 @@ jobs:
           path: repo
 
       - name: build
-        run: docker compose run site bash -c 'npm install && npm run build --base="/${{github.event.repository.name}}/"'
+        run: docker compose run site bash -c 'npm install && npm run build -- --base="/${{github.event.repository.name}}/"'
         working-directory: repo
 
       - name: Upload GitHub Pages artifact
