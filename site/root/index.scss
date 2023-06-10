@@ -1,0 +1,84 @@
+$main-color: #dcdddd;
+$main-bg-color: #292d38;
+$main-bg-dark-color: #14181f;
+$main-border-color: #404857;
+$main-button-color: #383c3c;
+$main-link-color: #c9d2e7;
+$main-link-visited-color: darken($main-link-color, 30%);
+$note-background: lighten($main-bg-color, 3%);
+
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: grid;
+    grid-auto-rows: 1fr;
+    grid-auto-columns: 1fr;
+    justify-items: center;
+}
+
+body {
+    color: $main-color;
+    background-color: $main-bg-color;
+    padding: 1em;
+    margin: 0;
+    overflow: hidden;
+    display: flex;
+    align-items: stretch;
+    flex-direction: column;
+}
+
+@media (max-aspect-ratio: 1/1) {
+    body {
+        width: 100%;
+    }
+}
+
+@media not all and (max-aspect-ratio: 1/1) {
+    body {
+        width: 50%;
+    }
+}
+
+
+a {
+    color: $main-link-color;
+
+    &:visited {
+        color: $main-link-visited-color;
+    }
+}
+
+h1 {
+    border-bottom: $main-border-color solid 4px;
+}
+
+hr {
+    all: unset;
+    background-color: $main-border-color;
+    height: 2px;
+}
+
+.note {
+    $pad: 1em;
+    outline: $note-background solid $pad;
+    margin: $pad;
+    border-left: $main-border-color solid 0.5em;
+    padding: 0 $pad;
+    background-color: $note-background;
+}
+
+.dir {
+    &>ul {
+        margin: 0;
+        padding-left: 1em;
+        list-style: "・";
+    }
+}

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.scss">
+    <title>SATySFi Documents</title>
+    <script src="src/index.ts" type="module"></script>
+</head>
+
+<body>
+    <h1 style="align-self: center;">SATySFi Documents</h1>
+    <div class="note">
+        <p>このリポジトリは <a href="https://github.com/gfngfn/SATySFi">SATySFi</a> の公式ドキュメント(doc/以下)をビルドしたものです．</p>
+        <p>ドキュメントは毎日0時にビルドされます．そのため，公式ドキュメントより内容が遅れる場合があります．</p>
+    </div>
+    $${{artifacts}}
+    <hr />
+    <div style="display: flex; flex-direction: row-reverse;">
+        <div><span>Commit Version: </span><span id="commit-version-display">...</span></div>
+    </div>
+</body>
+
+</html>

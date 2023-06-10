@@ -3,10 +3,11 @@ services:
   site:
     image: node:20-slim
     restart: 'no'
-    working_dir: '/site'
+    working_dir: '/satysfi-doc/site'
     tty: true
     volumes:
-      - ./:/satysfi-doc:cached
+      - .:/satysfi-doc:cached
+      - ./artifacts:/satysfi-doc/site/public/artifacts:cached
       - type: volume
         source: site_node_modules
         target: /satysfi-doc/site/node_modules

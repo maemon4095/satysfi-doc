@@ -2,7 +2,7 @@
     "name": "satysfi-doc/site",
     "dockerComposeFile": "../../docker-compose.yml",
     "service": "site",
-    "workspaceFolder": "/satysfi-doc",
+    "workspaceFolder": "/satysfi-doc/site",
     "forwardPorts": [
         8080
     ],

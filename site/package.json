@@ -5,15 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "vite build",
     "preview": "vite preview"
   },
-  "dependencies": {
-    "lit": "^2.6.1"
-  },
   "devDependencies": {
-    "pdfjs-dist": "^3.6.172",
+    "@types/node": "^20.2.5",
+    "fast-glob": "^3.2.12",
+    "sass": "^1.62.1",
     "typescript": "^5.0.2",
-    "vite": "^4.3.2"
+    "vite": "^4.3.9"
   }
 }
