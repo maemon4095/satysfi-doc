@@ -83,7 +83,8 @@ export default defineConfig({
     root: resolve(__dirname, 'root'),
     publicDir: "../public",
     build: {
-        outDir: "../dist"
+        outDir: "../dist",
+        emptyOutDir: true
     },
     plugins: [
         template({
