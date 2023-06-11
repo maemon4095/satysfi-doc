@@ -37,11 +37,11 @@ jobs:
           if [ "$LAST_COMMIT_ID" != "$HEAD_COMMIT_ID" ]; then
             echo "newer commit was found."
             if (git diff $LAST_COMMIT_ID $HEAD_COMMIT_ID --exit-code --quiet -- doc); then
-              echo "difference between last commit and head commit was found."
-              export REQUIRE_UPDATE=true
-            else
               echo "no difference was found."
               export REQUIRE_UPDATE=false
+            else
+              echo "difference between last commit and head commit was found."
+              export REQUIRE_UPDATE=true
             fi
           else
             echo "last commit is newest."
