@@ -62,7 +62,7 @@ jobs:
       run: |
         docker run --workdir /satysfi/doc \
                    --mount type=bind,consistency=cached,src=$(pwd)/satysfi,dst=/satysfi \
-                   ghcr.io/maemon4095/satysfi:latest "satyrographos install && make"
+                    docker run --rm -v ./trial:/workspace ghcr.io/maemon4095/satysfi-container:ubuntu /bin/bash -l -c "satyrographos install && make"
     
     - name: commit docs
       if: ${{ fromJSON(env.REQUIRE_UPDATE) }}
